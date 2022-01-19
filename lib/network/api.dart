@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Network {
-  final String _url = 'http://192.168.1.13:8000/api/user/';
+  final String _url = 'http://172.20.10.3:8000/api/user/';
   var token;
   var photo;
   var name;

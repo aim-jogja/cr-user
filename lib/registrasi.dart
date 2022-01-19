@@ -3,19 +3,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:cr_user/login_page.dart';
 import 'package:cr_user/network/api.dart';
-import 'package:cr_user/pages/welcome.dart';
-import 'package:cr_user/registrasi.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class Registrasi extends StatefulWidget {
+  const Registrasi({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegistrasiState createState() => _RegistrasiState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegistrasiState extends State<Registrasi> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   _showMsg(msg) {
     //
@@ -32,22 +31,21 @@ class _LoginPageState extends State<LoginPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future<void> _login() async {
-    var data = {'email': emailController.text, 'password': passController.text};
+  Future<void> _registrasi() async {
+    var data = {
+      'email': emailController.text,
+      'password': passController.text,
+      'name': nameController.text
+    };
 
-    var res = await Network().auth(data, 'login');
+    var res = await Network().auth(data, 'register');
     var body = json.decode(res.body);
     print(body);
     if (body['success'] == true) {
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      //
-      if (localStorage.getString('token') != null) {
-        await localStorage.clear();
-      }
-      localStorage.setString('username', body['username']);
       Navigator.push(
-          context, new MaterialPageRoute(builder: (context) => Welcome()));
+          context, new MaterialPageRoute(builder: (context) => LoginPage()));
     } else {
+      print(body['message']);
       _showMsg(body['message']);
     }
   }
@@ -55,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final field = Container(
-      padding: EdgeInsets.fromLTRB(25.0, 19.0, 25.0, 0),
+      padding: EdgeInsets.fromLTRB(25.0, 70.0, 25.0, 0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
             colors: [
@@ -79,6 +77,20 @@ class _LoginPageState extends State<LoginPage> {
           TextFormField(
             keyboardType: TextInputType.emailAddress,
             autofocus: false,
+            controller: nameController,
+            decoration: InputDecoration(
+              hintText: 'Name',
+              contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            keyboardType: TextInputType.emailAddress,
+            autofocus: false,
             controller: emailController,
             decoration: InputDecoration(
               hintText: 'Email',
@@ -87,8 +99,8 @@ class _LoginPageState extends State<LoginPage> {
                   OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.0,
           ),
           TextFormField(
             keyboardType: TextInputType.emailAddress,
@@ -107,31 +119,22 @@ class _LoginPageState extends State<LoginPage> {
           ),
           ElevatedButton(
             onPressed: () {
-              _login();
+              _registrasi();
             },
-            child: Text("Masuk".toString()),
+            child: Text("Register".toString()),
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
                 primary: const Color.fromRGBO(241, 209, 40, 1),
                 fixedSize: Size(500, 30)),
           ),
-          TextButton(
-            child: const Text(
-              'Belum Punya akun?',
-              style: TextStyle(color: Colors.black54),
-            ),
-            onPressed: () {
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => Registrasi()));
-            },
-          ),
         ],
       ),
     );
 
     return Scaffold(
-      body: SafeArea(child: field),
+      resizeToAvoidBottomInset: false,
+      body: field,
     );
   }
 }
