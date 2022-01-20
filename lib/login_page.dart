@@ -41,10 +41,6 @@ class _LoginPageState extends State<LoginPage> {
     if (body['success'] == true) {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
       //
-      if (localStorage.getString('token') != null) {
-        await localStorage.clear();
-      }
-      localStorage.setString('username', body['username']);
       Navigator.push(
           context, new MaterialPageRoute(builder: (context) => Welcome()));
     } else {
@@ -55,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final field = Container(
-      padding: EdgeInsets.fromLTRB(25.0, 19.0, 25.0, 0),
+      padding: EdgeInsets.fromLTRB(25.0, 70.0, 25.0, 0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
             colors: [
@@ -69,6 +65,9 @@ class _LoginPageState extends State<LoginPage> {
       ),
       child: Column(
         children: <Widget>[
+          SizedBox(
+            height: 65.0,
+          ),
           Hero(
             tag: "Logo",
             child: Image.asset('assets/logo.png'),
@@ -131,7 +130,8 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     return Scaffold(
-      body: SafeArea(child: field),
+      resizeToAvoidBottomInset: false,
+      body: field,
     );
   }
 }

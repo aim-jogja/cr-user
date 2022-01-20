@@ -1,6 +1,7 @@
+import 'package:cr_user/profil.dart';
 import 'package:flutter/material.dart';
 import 'package:cr_user/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:cr_user/network/api.dart';
 import 'package:cr_user/forum.dart';
 import 'package:cr_user/report.dart';
@@ -20,22 +21,9 @@ class _WelcomeState extends State<Welcome> {
     return body;
   }
 
-  var username;
-  _getName() async {
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    //
-    if (localStorage.getString('token') != null) {
-      await localStorage.clear();
-    }
-    var name = localStorage.getString('username');
-    print(name);
-    return name;
-  }
-
   @override
   void _initState() {
     super.initState();
-    username = _getName();
   }
 
   @override
@@ -62,13 +50,13 @@ class _WelcomeState extends State<Welcome> {
               Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
                     child: Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(50.0, 8.0, 0, 8.0),
+                          padding: const EdgeInsets.fromLTRB(10.0, 8.0, 0, 8.0),
                           child: Text(
-                            "Welcome, User",
+                            "Welcome, Police",
                             style: const TextStyle(fontSize: 29),
                           ),
                         ),
@@ -79,47 +67,57 @@ class _WelcomeState extends State<Welcome> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             child: Image.asset('assets/bel.png'),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => ForumPage()));
+                            },
                           ),
                         ),
                         SizedBox(
-                          width: 10,
+                          width: 5,
                         ),
                         GestureDetector(
                           child: Image.asset('assets/user.png'),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => ProfilePage()));
+                          },
                         ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(30, 50.0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 50.0, 0, 0),
                     child: GestureDetector(
                       child: Image.asset(
                         'assets/news.png',
-                        width: 350,
+                        width: 300,
                       ),
                       onTap: () {},
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(30, 50.0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 50.0, 0, 0),
                     child: GestureDetector(
                       child: Image.asset(
                         'assets/map.png',
-                        width: 350,
+                        width: 300,
                       ),
                       onTap: () {},
                     ),
                   ),
                   Padding(
-                      padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
+                      padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
                       child: Row(
                         children: <Widget>[
                           GestureDetector(
                             child: Image.asset(
                               'assets/forum.png',
-                              width: 150,
+                              width: 100,
                             ),
                             onTap: () {
                               Navigator.push(
@@ -134,7 +132,7 @@ class _WelcomeState extends State<Welcome> {
                           GestureDetector(
                             child: Image.asset(
                               'assets/report.png',
-                              width: 150,
+                              width: 100,
                             ),
                             onTap: () {
                               Navigator.push(
